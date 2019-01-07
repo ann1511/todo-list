@@ -1,56 +1,95 @@
 body {
     font-family: "American Typewriter"  ;
-    font-size: 15px;
-    font-weight: bolder;
-}
-
-.add-todo__input {
-    margin-top: 100px;
-    margin-left: 100px;
-    width: 470px;
-    height: 30px;
-    border: cornflowerblue solid 2px;
-    border-radius: 25px;
-    font: inherit;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: darkslateblue;
 }
 
 li {
     list-style-type: none; /* Убираем маркеры */
+}
+
+label > p, label > input[type='checkbox'] {
     display: inline-block;
 }
 
-input[type='checkbox']:checked + label{
+input[type='checkbox']:checked + p {
     color: gray;
     text-decoration: line-through;
     font-weight: normal;
 }
 
-label {
+p {
     padding: 5px;
 }
 
 button {
+    margin-right: 5px;
+    margin-left: 5px;
     width: 120px;
     height: 30px;
-    border: cornflowerblue solid 2px;
-    border-radius: 25px;
-    background: cornflowerblue;
-    color: darkblue;
+
     text-align: center;
     font: inherit;
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
-.do {
-    font-family: "American Typewriter"  ;
     font-size: 15px;
-    font-weight: bolder;
+    font-weight: bold;
+
+    background: lightblue;
+    color: darkgray;
+    border: lightblue solid 2px;
+    border-radius: 25px;
+}
+
+.todo__text {
+    color: inherit;
+}
+
+
+.add-todo__input {
+    margin-top: 100px;
+    width: 470px;
+    height: 30px;
+    border: lightblue solid 2px;
+    border-radius: 25px;
+    font: inherit;
+    color: inherit;
+    padding-left: 15px;
+}
+
+.add-todo__input:focus,
+.todo__input:focus,
+button:focus {
+    outline: none;
+    border: lightblue solid 2px;
+    border-radius: 25px;
+    box-shadow: 1px 1px 4px lightblue inset, 2px 2px 4px lightblue;
+    outline: 0 none;
+}
+
+.todo__input {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 270px;
+    height: 20px;
+    border: lightblue solid 2px;
+    border-radius: 25px;
+    font: inherit;
+}
+
+.todo__checkbox {
 
 }
 
-/*.done {*/
-    /*color: gray;*/
-    /*text-decoration: line-through;*/
-    /*font-weight: normal;*/
-/*}*/
+
+.todo__button_edit {
+
+}
+
+.todo__button_delete {
+
+}
+
+.todo__button_save {
+
+}
