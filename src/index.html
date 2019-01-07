@@ -5,12 +5,23 @@
     <title>Todo list</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
-    <input class="add-todo__input" placeholder="Введите текст" autofocus>
-    <button class="add-todo__button">Добавить</button>
-    <ul class="todo-list">
-
-    </ul>
-<script src="index.js"></script>
-</body>
+    <body>
+        <input class="add-todo__input" placeholder="Введите текст" autofocus>
+        <button class="add-todo__button">Добавить</button>
+        <ul class="todo-list"></ul>
+        <footer>
+            <ul class="filter">
+                <li>
+                    <button class='all'>Все</button>
+                </li>
+                <li>
+                    <button class='active'>Активные</button>
+                </li>
+                <li>
+                    <button class='finished'>Завершенные</button>
+                </li>
+            </ul>
+        </footer>
+        <script src="index.js"></script>
+    </body>
 </html>

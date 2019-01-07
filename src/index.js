@@ -21,16 +21,36 @@ const createButton = function(parent, func, tag, className, text) {
     return button;
 };
 
+
+function handlerStateTODO() {// пока тыкаем в checkbox
+    // console.log(event.currentTarget, 'currentTarget');
+    // console.log(event.target, 'target');
+    const classList = this.parentNode.parentNode.classList;  // меняем класс у li
+
+    if (!classList.contains('finished')) {
+        classList.add('finished');
+        classList.remove('active');
+    }
+    else {
+        classList.remove('finished');
+        classList.add('active');
+    }
+}
+
+
 const createEditTODO = function(parent, text) {
     const label = document.createElement('label' );
     const checkbox = createElement('input', 'todo__checkbox' );
     const p = createElement('p', 'todo__text', text);
-
+    parent.classList.add('active');
     checkbox.type = "checkbox";
 
     label.appendChild(checkbox);
     label.appendChild(p);
+
     parent.appendChild(label);
+
+    checkbox.addEventListener('click', handlerStateTODO); // не знаю почему обработчик срабатывает дважды для label
 
     return label;
 };
@@ -50,7 +70,6 @@ const createListItem = function () {
 
 const deleteText = function () {
     this.parentNode.removeChild(this);
-    console.log('del')
 };
 
 const saveText = function () {
@@ -86,7 +105,7 @@ const editText = function () {
     buttonSave.addEventListener('click', saveText.bind(this));
 };
 
-const onСlickEnter = function(event) {
+const onСlickEnter = function(event) { // можно не писать аргумент, он передается в функцию-обработчик по умолчанию (обязательно event)
     if (event.code === 'Enter') { // совсем не прозрачно.
         createListItem();
     }
@@ -94,3 +113,36 @@ const onСlickEnter = function(event) {
 
 buttonAddTodo.addEventListener('click', createListItem);
 todoInput.addEventListener('keydown', onСlickEnter);
+
+
+const handlerFilter = function () {
+    const status = event.target.classList[0];
+    const items = todoList.querySelectorAll('li');
+
+    if (status === 'active') {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].classList.contains('finished')) {
+                items[i].hidden = true;
+            }
+            else items[i].hidden = false
+        }
+    }
+
+    else if (status === 'finished') {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].classList.contains('active')) {
+                items[i].hidden = true;
+            }
+            else items[i].hidden = false
+        }
+    }
+
+    else if (status === 'all') {
+        for (let i = 0; i < items.length; i++) {
+                items[i].hidden = false;
+        }
+    }
+};
+
+const filter =  document.querySelector('.filter');
+filter.addEventListener('click', handlerFilter);
