@@ -1,0 +1,49 @@
+body {
+    font-family: "American Typewriter"  ;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: darkslateblue;
+}
+
+.input {
+    outline: none;
+    border: lightblue solid 2px;
+    border-radius: 25px;
+    box-shadow: 1px 1px 4px lightblue inset, 2px 2px 4px lightblue;
+    font: inherit;
+    color: inherit;
+}
+
+.list__input {
+    margin: 100px 35% 30px;
+
+    width: 30%;
+    height: 30px;
+    padding-left: 15px;
+}
+
+.todo {
+    list-style-type: none; /* Убираем маркеры */
+    /*position: relative;*/
+}
+
+.container {
+    /*position: absolute;*/
+    /*clip: rect(5px, auto, auto, auto);*/
+    background-image: url('checkbox.png');
+    background-repeat: no-repeat;
+    background-position-x: 2px;
+    background-position-y: 5px; /* нужно немного обрезать картинку и картинка загружается с опозданием*/
+    padding-left: 30px;
+}
+
+.container.checked {
+    background-position-x: 2px;
+    background-position-y: -15px;
+}
+
+
+.checkbox {
+    display: none;
+}
