@@ -1,53 +1,73 @@
-const body = document.querySelector('body');
-
-const createElement = function (parent, tag, className, text) {
-    const element = document.createElement(tag);
-
-    if (className) {
-        const classes = className.split(' ');
-        classes.forEach( (item) => element.classList.add(item));
-    };
-
-    if (text && tag === 'input') element.value = text;
-    else if (text) element.textContent = text;
-
-    parent.appendChild(element);
-
-    return element;
+const bem = function (block) {
+    if (!block.name) {
+        block.name = 'todo-box';
+    }
+    if(!block.mod) {
+        return block.name + '__' + block.elem;
+    }
+    if (!block.elem) {
+        return block.name + '_' + block.mod + '_' + block.value;
+    }
+    else return block.name + '__' + block.elem + '_'+ block.mod + '_' + block.value;
 };
 
-const main = function () {
-    const list__input = createElement(body,'input', 'input list__input');
-    list__input.setAttribute('autofocus', 'autofocus'); // можно так
-    list__input.placeholder = 'Введите текст'; // а еще можно так
-
-    createElement(body,'ul', 'list');
-    createElement(body,'footer', 'filter');
-
-    const onСlickEnter = function(event) { // можно не писать аргумент, он передается в функцию-обработчик по умолчанию (обязательно event)
-        if (event.code === 'Enter') {
-            createTODO();
-        }
+const createHTMLElem = function (parent, tag, attributes) {
+    if (parent === undefined || !tag) {
+        console.log("Unknown tag or parent"); // обработать нормально ошибки
     };
 
-    list__input.addEventListener('keydown', onСlickEnter);
+    const elemHTML = document.createElement(tag);
+
+    if (attributes) {
+        Object.entries(attributes).forEach( (item) => elemHTML.setAttribute(item[0], item[1]));
+    };
+    if (parent !== null) parent.appendChild(elemHTML);
+
+    return elemHTML;
+
+};
+
+/**
+ * @param {HTMLElement} parent
+ * @param {String} tag
+ * @param {Object} attributes - Объект атрибутов формата {name: value}
+ *
+ * @returns {HTMLElement} - Новый элемент
+ */
+
+const body = document.querySelector('body');
+
+const main = function () {
+
+    const todoBox = createHTMLElem(body, 'div', {class: bem({name: 'todo-box', mod: 'bg', value: 'gray'})});
+
+    const mod_input = bem({name: 'todo-box', elem: 'input'});
+    const mod_addTodo = bem({name: 'todo-box', elem: 'add-todo'});
+
+    const todoBox__form = createHTMLElem(todoBox, 'form', {class: bem({name: 'todo-box', elem: 'form'})});
+    const todoBox__addTodo = createHTMLElem(todoBox__form, 'input',
+        {class: mod_addTodo + ' ' + mod_input,
+                'autofocus': 'autofocus', 'placeholder': 'Введите текст'});
+    // autofocus невозможно установить средствами css - ?? TODO: сделать через класс
+
+    const todoList = createHTMLElem(todoBox, 'ul', {class: bem({name: 'todo-box', elem: 'list'})});
+
+    const addTODO = function(event) {
+        event.preventDefault();
+        createTODO();
+        todoBox__addTodo.value = '';
+    };
+
+    todoBox__form.addEventListener('submit', addTODO);
 };
 
 const createTODO = function () {
-    const list__input = document.querySelector('.list__input');
-    const list = document.querySelector('.list');
-    const todo = createElement(list ,'li', 'list__item todo');
-    const container = createElement(todo ,'label', 'container'); //
-    const checkbox = createElement(container ,'input', 'checkbox');
-    checkbox.type = 'checkbox';
-    container.appendChild(document.createTextNode(list__input.value));  // сложное добавление текста в todo
-    list__input.value = '';
+    const list = document.querySelector('.todo-box__list');
+    const input = document.querySelector('.todo-box__add-todo')
+    const todoBox__item = createHTMLElem(null,'li', {class: bem({name: 'todo-box', elem: 'item'})});
+    todoBox__item.textContent = input.value; // TODO: сделать через createHTMLElem
 
-    checkbox.addEventListener('click', function () {
-        container.classList.toggle('checked'); // так наверное не делают, но с моей архитектурой хз, как сделать лучше
-    });
-
-    list.insertBefore(todo, list.firstChild);
+    list.insertBefore(todoBox__item, list.firstChild);
 };
 
 main();
