@@ -1,5 +1,5 @@
 body {
-    font-family: "American Typewriter"  ;
+    font-family: "Arial"  ;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
@@ -58,30 +58,35 @@ body {
     display: inline-block;
 }
 
-.completed + .todo-box__text {
-    text-decoration: line-through;
-}
 
 hr {
     margin: 10px;
 }
 
 .todo-box__label {
-    /*position: absolute;*/
-    /*clip: rect(5px, auto, auto, auto);*/
-    background-image: url('checkbox.png');
+    position: relative;
+}
+
+.todo-box__label:before {
+    position: absolute;
+    background-image: url(checkbox.png);
     background-repeat: no-repeat;
-    background-position-x: 2px;
-    background-position-y: 5px; /* нужно немного обрезать картинку и картинка загружается с опозданием*/
-    padding-left: 30px;
+    content: '';
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    top: 3px;
+    left: -25px;
 }
-
-.todo-box__label.completed { /* completed ставится на checkbox, а менять position надо у label */
-    background-position-x: 2px;
-    background-position-y: -15px;
-}
-
 
 .todo-box__checkbox {
     display: none;
+}
+
+.todo-box__item_completed .todo-box__label:before { /* completed ставится на checkbox, а менять position надо у label */
+    background-position-y: -20px;
+}
+
+.todo-box__item_completed .todo-box__text {
+    text-decoration: line-through;
 }

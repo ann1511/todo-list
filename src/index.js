@@ -2,7 +2,7 @@ const todoList = document.querySelector('.todo-list');
 const todoInput = document.querySelector('.add-todo__input');
 const buttonAddTodo = document.querySelector('.add-todo__button');
 
-const createElement = function (tag, className, text) {
+const createElement = function (tag, className, text, attrs) {
     const element = document.createElement(tag);
 
     if (className) element.classList.add(className);
@@ -22,10 +22,11 @@ const createButton = function(parent, func, tag, className, text) {
 };
 
 
-function handlerStateTODO() {// пока тыкаем в checkbox
+function handlerStateTODO(e) {// пока тыкаем в checkbox
     // console.log(event.currentTarget, 'currentTarget');
     // console.log(event.target, 'target');
-    const classList = this.parentNode.parentNode.classList;  // меняем класс у li
+    console.log('evenat', e, this)
+    const classList = e.currentTarget.classList;  // меняем класс у li
 
     if (!classList.contains('finished')) {
         classList.add('finished');
@@ -50,7 +51,7 @@ const createEditTODO = function(parent, text) {
 
     parent.appendChild(label);
 
-    checkbox.addEventListener('click', handlerStateTODO); // не знаю почему обработчик срабатывает дважды для label
+    parent.addEventListener('change', handlerStateTODO); // не знаю почему обработчик срабатывает дважды для label
 
     return label;
 };
@@ -77,6 +78,7 @@ const saveText = function () {
     const buttonSave = document.querySelector('.todo__button_save');
 
     const todo = createEditTODO(input.parentNode, input.value);
+    // TODO: смотреть e.target (e.currentTarget)
     const buttonEdit = createButton(buttonSave.parentNode, editText.bind(this), 'button', 'todo__button_edit', 'Изменить');
 
     input.parentNode.replaceChild(todo, input);

@@ -72,10 +72,13 @@ const createTODO = function () {
 
     const todoBox__label = createHTMLElem(todoBox__item,'label',
         {class: bem({name: 'todo-box', elem: 'label'})});
-    todoBox__label.addEventListener('click', handlerStateTODO); // класс устанавливается на checkbox
+
 
     const mod_checkbox = bem({name: 'todo-box', elem: 'checkbox'});
+
+
     const todoBox__checbox = createHTMLElem(todoBox__label,'input', {class: mod_checkbox, type: 'checkbox'});
+    todoBox__checbox.addEventListener('change', handlerStateTODO);
 
     const todoBox__text = createHTMLElem(todoBox__label,'p',
         {class: bem({name: 'todo-box', elem: 'text'}), type: ''});
@@ -101,7 +104,7 @@ const handlerDeleteTODO = function(event) {
 };
 
 function handlerStateTODO(event) {
-    event.target.classList.toggle("completed");
+    event.target.closest('.todo-box__item').classList.toggle("todo-box__item_completed");
 }
 
 const handlerEditTODO = function (event) {  // стоит прятать кнопку 'удалить'?
