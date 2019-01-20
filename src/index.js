@@ -1,150 +1,154 @@
-const todoList = document.querySelector('.todo-list');
-const todoInput = document.querySelector('.add-todo__input');
-const buttonAddTodo = document.querySelector('.add-todo__button');
+function bem(blockName) {
+    return {
+        block: function() {
+            return blockName;
+        },
 
-const createElement = function (tag, className, text, attrs) {
-    const element = document.createElement(tag);
+        elem: function(elem) {
+            return `${blockName}__${elem}`;
+        },
 
-    if (className) element.classList.add(className);
+        mod: function(modName) {
+            return `${blockName}_${modName}`;
+        },
 
-    if (text && tag === 'input') element.value = text;
-    else if (text) element.textContent = text;
+        elemMods: function(elem, modName, modVal) {
+            return `${blockName}__${elem}_${modName}_${modVal}`;
+        }
 
-    return element;
-
-};
-
-const createButton = function(parent, func, tag, className, text) {
-    const button = createElement(tag, className, text);
-    button.addEventListener('click', func);
-    parent.appendChild(button);
-    return button;
-};
-
-
-function handlerStateTODO(e) {// пока тыкаем в checkbox
-    // console.log(event.currentTarget, 'currentTarget');
-    // console.log(event.target, 'target');
-    console.log('evenat', e, this)
-    const classList = e.currentTarget.classList;  // меняем класс у li
-
-    if (!classList.contains('finished')) {
-        classList.add('finished');
-        classList.remove('active');
-    }
-    else {
-        classList.remove('finished');
-        classList.add('active');
     }
 }
 
-
-const createEditTODO = function(parent, text) {
-    const label = document.createElement('label' );
-    const checkbox = createElement('input', 'todo__checkbox' );
-    const p = createElement('p', 'todo__text', text);
-    parent.classList.add('active');
-    checkbox.type = "checkbox";
-
-    label.appendChild(checkbox);
-    label.appendChild(p);
-
-    parent.appendChild(label);
-
-    parent.addEventListener('change', handlerStateTODO); // не знаю почему обработчик срабатывает дважды для label
-
-    return label;
-};
-
-
-const createListItem = function () {
-    const li = document.createElement('li' );
-
-    const todo = createEditTODO(li, todoInput.value);
-
-    const buttonEdit = createButton(li, editText.bind(li),'button','todo__button_edit', 'Изменить' );
-    const buttonDelete = createButton(li, deleteText.bind(li),'button', 'todo__button_delete', 'Удалить');
-
-    todoInput.value = '';
-    todoList.insertBefore(li, todoList.firstChild);
-};
-
-const deleteText = function () {
-    this.parentNode.removeChild(this);
-};
-
-const saveText = function () {
-    const input = document.querySelector('.todo__input');
-    const buttonSave = document.querySelector('.todo__button_save');
-
-    const todo = createEditTODO(input.parentNode, input.value);
-    // TODO: смотреть e.target (e.currentTarget)
-    const buttonEdit = createButton(buttonSave.parentNode, editText.bind(this), 'button', 'todo__button_edit', 'Изменить');
-
-    input.parentNode.replaceChild(todo, input);
-
-    this.replaceChild(buttonEdit, buttonSave);
-
-};
-
-const editText = function () {
-    const label = this.querySelector('label');
-
-    const checkbox = this.querySelector('.todo__checkbox');
-    const p = this.querySelector('p');
-    const buttonEdit = this.querySelector('.todo__button_edit');
-
-    const input = createElement('input', 'todo__input', p.textContent);
-    const buttonSave = createElement('button', 'todo__button_save', 'Сохранить');
-
-    input.classList.add('todo__text');
-    label.removeChild(checkbox);
-    label.parentNode.replaceChild(input, label);
-    this.replaceChild(buttonSave, buttonEdit);
-
-    input.focus(); // курсор в инпуте
-
-    buttonSave.addEventListener('click', saveText.bind(this));
-};
-
-const onСlickEnter = function(event) { // можно не писать аргумент, он передается в функцию-обработчик по умолчанию (обязательно event)
-    if (event.code === 'Enter') { // совсем не прозрачно.
-        createListItem();
-    }
-};
-
-buttonAddTodo.addEventListener('click', createListItem);
-todoInput.addEventListener('keydown', onСlickEnter);
-
-
-const handlerFilter = function () {
-    const status = event.target.classList[0];
-    const items = todoList.querySelectorAll('li');
-
-    if (status === 'active') {
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].classList.contains('finished')) {
-                items[i].hidden = true;
-            }
-            else items[i].hidden = false
-        }
+const createHTMLElem = function (parent, tag, attributes) {
+    if (parent === undefined || !tag) {
+        console.log("Unknown tag or parent"); // обработать нормально ошибки
     }
 
-    else if (status === 'finished') {
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].classList.contains('active')) {
-                items[i].hidden = true;
-            }
-            else items[i].hidden = false
-        }
+    const elemHTML = document.createElement(tag);
+
+    if (attributes) {
+        Object.entries(attributes).forEach((item) => elemHTML.setAttribute(item[0], item[1]));
     }
 
-    else if (status === 'all') {
-        for (let i = 0; i < items.length; i++) {
-                items[i].hidden = false;
-        }
-    }
+    if (parent !== null) parent.appendChild(elemHTML);
+
+    return elemHTML;
+
 };
 
-const filter =  document.querySelector('.filter');
-filter.addEventListener('click', handlerFilter);
+const body = document.querySelector('body');
+
+const main = function () {
+    const bl = bem('todo-box');
+
+    const box = createHTMLElem(body, 'div', {class: bl.mod('bg_gray') + ' ' + bl.block()});
+
+    const form = createHTMLElem(box, 'form', {class: bl.elem('form')});
+    const input = createHTMLElem(form, 'input',
+        {class: bl.elem('add-todo') + ' ' + bl.elem('input'), 'placeholder': 'Введите текст'});
+    input.focus();
+    const list = createHTMLElem(box, 'ul', {class: bl.elem('list')});
+
+    const addTODO = function (event) {
+        event.preventDefault();
+        const todoItem = createTodoItem(input.value, false);
+        list.insertBefore(todoItem, list.firstChild);
+        input.value = '';
+    };
+
+    form.addEventListener('submit', addTODO);
+};
+
+const createTodoItem = function(value, completed) {
+    const bl = bem('todo-item');
+    const blButton = bem('button');
+
+    const todoItem = createHTMLElem(null, 'li', { class: bl.block() });
+    const todoItemContent = createHTMLElem(todoItem, 'div', { class: bl.elem('content') });
+
+    const label = createHTMLElem(todoItemContent, 'label', { class: bl.elem('label')});
+    const checkbox = createHTMLElem(label, 'input', {
+        class: bl.elem('checkbox'),
+        type: 'checkbox',
+        checked: completed
+    });
+
+    checkbox.addEventListener('change', handlerTodoStateChange);
+
+    const text = createHTMLElem(label, 'p', { class: bl.elem('text')});
+    text.textContent = value;
+
+    const editButton = createHTMLElem(todoItemContent, 'button',
+        { class: bl.elemMods('button', 'type', 'edit') + ' ' + blButton.block()});
+    editButton.textContent = 'Изменить';
+    editButton.addEventListener('click', handlerTodoStartEdit);
+
+    const deleteButton = createHTMLElem(todoItemContent, 'button',
+        { class: bl.elemMods('button', 'type', 'delete') + ' ' + blButton.block()});
+    deleteButton.textContent = 'Удалить';
+    deleteButton.addEventListener('click', handlerTodoDelete);
+
+    return todoItem;
+};
+
+const handlerTodoStateChange = function(e) {
+    const bl = bem('todo-item');
+    e.target.closest('.' + bl.block()).classList.toggle(bl.mod('completed'));
+};
+
+const handlerTodoStartEdit = function(e) {
+    const bl = bem('todo-item');
+
+    const todoItem = e.target.closest('.' + bl.block());
+    const value = todoItem.querySelector('.' + bl.elem('text')).textContent;
+
+    const form = createTodoItemEditForm(value);
+
+    todoItem.appendChild(form);
+
+    todoItem.classList.toggle(bl.mod('edit'));
+};
+
+const handlerTodoDelete = function (event) {
+    const bl = bem('todo-item');
+    const todoItem = event.target.closest('.' + bl.block());
+    todoItem.remove();
+};
+
+const createTodoItemEditForm = function(value) {
+    const bl = bem('todo-item');
+    const blButton = bem('button');
+
+    const form = createHTMLElem(null, 'form', { class: bl.elem('form') });
+
+    const input = createHTMLElem(form, 'input', {
+        class: bl.elem('input'),
+        value: value
+    });
+
+    const saveButton = createHTMLElem(form, 'button',
+        { class: bl.elemMods('button', 'type', 'save') + ' ' + blButton.block()});
+    saveButton.textContent = 'Сохранить';
+
+    form.addEventListener('submit', handlerTodoEndEdit);
+
+    return form;
+};
+
+
+const handlerTodoEndEdit = function(e) {
+    e.preventDefault();
+
+    const bl = bem('todo-item');
+    const form = e.target;
+    const todoItem = form.closest('.' + bl.block());
+    const value = form.querySelector('.' + bl.elem('input')).value;
+
+    todoItem.classList.toggle(bl.mod('edit'));
+    todoItem.querySelector('.' + bl.elem('text')).textContent = value;
+
+    form.remove();
+};
+
+
+main();

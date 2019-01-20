@@ -1,36 +1,28 @@
 body {
-    font-family: "American Typewriter"  ;
+    font-family: "Arial"  ;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
     color: darkslateblue;
 }
 
-li {
-    list-style-type: none; /* Убираем маркеры */
+.todo-box_bg_gray {
+    background: #f5f5f5;
 }
 
-label > p, label > input[type='checkbox'] {
-    display: inline-block;
+.todo-item__input {
+    border: lightblue solid 2px;
+    border-radius: 25px;
+    box-shadow: 1px 1px 4px lightblue inset, 2px 2px 4px lightblue;
+    outline: none;
+    padding-left: 15px;
+    height: 23px;
+    width: 300px;
+    font: inherit;
+    color: inherit;
 }
 
-/*input[type='checkbox']:checked + p {*/
-    /*color: gray;*/
-    /*text-decoration: line-through;*/
-    /*font-weight: normal;*/
-/*}*/
-
-.finished p {
-    color: gray;
-    text-decoration: line-through;
-    font-weight: normal;
-}
-
-p {
-    padding: 5px;
-}
-
-button {
+.button {
     margin-right: 5px;
     margin-left: 5px;
     width: 130px;
@@ -45,68 +37,61 @@ button {
     color: darkgray;
     border: lightblue solid 2px;
     border-radius: 25px;
+    outline: none;
 }
 
-footer {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
-}
-
-footer li {
-    display: inline;
-}
-
-.todo__text {
-    color: inherit;
-}
-
-
-.add-todo__input {
-    margin-top: 100px;
-    width: 470px;
+.todo-box__add-todo {
+    margin: 100px 35% 30px;
     height: 30px;
-    border: lightblue solid 2px;
-    border-radius: 25px;
+    width: 30%;
+    padding-left: 15px;
+
     font: inherit;
     color: inherit;
-    padding-left: 15px;
-}
 
-.add-todo__input:focus,
-.todo__input:focus,
-button:focus {
-    outline: none;
     border: lightblue solid 2px;
     border-radius: 25px;
     box-shadow: 1px 1px 4px lightblue inset, 2px 2px 4px lightblue;
-    outline: 0 none;
+    outline: none;
 }
 
-.todo__input {
-    margin-top: 10px;
-    margin-left: 10px;
-    width: 270px;
+.todo-item {
+    list-style-type: none; /* Убираем маркеры */
+    margin: 0px;
+}
+
+.todo-item__text {
+    display: inline-block;
+}
+
+.todo-item__label {
+    position: relative;
+}
+
+.todo-item__label:before {
+    position: absolute;
+    background-image: url(checkbox.png);
+    background-repeat: no-repeat;
+    content: '';
+    display: inline-block;
     height: 20px;
-    border: lightblue solid 2px;
-    border-radius: 25px;
-    font: inherit;
+    width: 20px;
+    top: 3px;
+    left: -25px;
 }
 
-.todo__checkbox {
-
+.todo-item__checkbox {
+    display: none;
 }
 
-
-.todo__button_edit {
-
+.todo-item_completed .todo-item__label:before { /* completed ставится на checkbox, а менять position надо у label */
+    background-position-y: -20px;
 }
 
-.todo__button_delete {
-
+.todo-item_completed .todo-item__text {
+    text-decoration: line-through;
 }
 
-.todo__button_save {
-
+.todo-item_edit .todo-item__content {
+    display: none;
 }
