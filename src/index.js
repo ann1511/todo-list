@@ -8,7 +8,10 @@ function bem(blockName) {
             return `${blockName}__${elem}`;
         },
 
-        mod: function(modName) {
+        mod: function(modName, modVal) {
+            if (modVal) {
+                return `${blockName}_${modName}_${modVal}`
+            }
             return `${blockName}_${modName}`;
         },
 
@@ -57,9 +60,48 @@ const main = function () {
     };
 
     form.addEventListener('submit', addTODO);
+
+    const hr = createHTMLElem(box, 'hr');
+
+    const blFooter = bem('footer');
+
+    const footer = createHTMLElem(box, 'footer', {class: blFooter.block()});
+    const filters = createHTMLElem(footer, 'div', {class: blFooter.elem('filters')});
+
+    const createRatio = function (nameLabel, value) {
+        const blFilter = bem('filter');
+        const blLabel = bem('label');
+
+        const container = createHTMLElem(filters, 'div',
+            {class: blFilter.elem('container') + ' ' + blLabel.mod(nameLabel)});
+
+        const label = createHTMLElem(container, 'label',
+            {class: blFilter.elem('label')});
+        label.textContent = value;
+        const elem = createHTMLElem(label, 'input', {
+            class: blFilter.elem('input'),
+            type: 'radio',
+            name: 'filter',
+            readonly: 'readonly'});
+        elem.addEventListener('click', handlerTodoFilter);
+
+        return container;
+    }
+
+    const filterAll = createRatio('all', 'Все');
+
+    const filterActive = createRatio('active', 'Активные');
+
+    const filterCompleted = createRatio('completed', 'Завершенные');
+
+    // filters.addEventListener('click', handlerTodoFilter); // получается дичь, если вешать обработчик на filters
 };
 
 const createTodoItem = function(value, completed) {
+    if (value === '') {
+        alert('Введите текст');
+        return;
+    }
     const bl = bem('todo-item');
     const blButton = bem('button');
 
@@ -148,6 +190,27 @@ const handlerTodoEndEdit = function(e) {
     todoItem.querySelector('.' + bl.elem('text')).textContent = value;
 
     form.remove();
+};
+
+const handlerTodoFilter = function(e) {
+    const bl = bem('list');
+    const list = document.querySelector('.todo-box__list');
+    const container = e.target.closest('.filter__container');
+    console.log(container)
+    if (container.classList.contains('label_completed')) {
+        list.classList.add(bl.mod('show', 'completed'));
+        list.classList.remove(bl.mod('show', 'active'));
+
+    }
+    else if (container.classList.contains('label_active')) {
+        list.classList.remove(bl.mod('show', 'completed'));
+        list.classList.add(bl.mod('show', 'active'));
+
+    }
+    else {
+        list.classList.remove(bl.mod('show', 'active'));
+        list.classList.remove(bl.mod('show', 'completed'));
+    }
 };
 
 

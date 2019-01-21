@@ -11,15 +11,17 @@ body {
 }
 
 .todo-item__input {
+    height: 23px;
+    width: 300px;
+    padding-left: 15px;
+
+    font: inherit;
+    color: inherit;
+
     border: lightblue solid 2px;
     border-radius: 25px;
     box-shadow: 1px 1px 4px lightblue inset, 2px 2px 4px lightblue;
-    outline: none;
-    padding-left: 15px;
-    height: 23px;
-    width: 300px;
-    font: inherit;
-    color: inherit;
+    outline: none; /* Прячем подстветку рамки  */
 }
 
 .button {
@@ -37,7 +39,6 @@ body {
     color: darkgray;
     border: lightblue solid 2px;
     border-radius: 25px;
-    outline: none;
 }
 
 .todo-box__add-todo {
@@ -81,17 +82,85 @@ body {
 }
 
 .todo-item__checkbox {
-    display: none;
+    display: none; /*Прячем галку поумолчанию*/
 }
 
-.todo-item_completed .todo-item__label:before { /* completed ставится на checkbox, а менять position надо у label */
+.todo-item_completed .todo-item__label:before {
     background-position-y: -20px;
 }
 
 .todo-item_completed .todo-item__text {
-    text-decoration: line-through;
+    text-decoration: line-through; /*Зачеркиваем текст*/
 }
 
 .todo-item_edit .todo-item__content {
     display: none;
 }
+
+.footer {
+    padding-bottom: 20px;
+}
+
+.filter {
+    margin-right: 5px;
+    margin-left: 5px;
+    width: 130px;
+    height: 30px;
+
+    text-align: center;
+    font: inherit;
+    font-size: 15px;
+    font-weight: bold;
+
+    color: darkgray;
+    border: lightblue solid 2px;
+    border-radius: 25px;
+    /*outline: none;*/
+
+    cursor: default;
+}
+
+.list_show_active .todo-item_completed {
+    display: none;
+}
+
+.list_show_completed .todo-item:not(.todo-item_completed) {
+    display: none;
+}
+
+
+/*.todo-box__list:not(.list_show_active):not(.list_show_completed) ~ .footer .filter__all { !*блин, это же ратио, можно проще *!*/
+    /*background: lightblue;*/
+/*}*/
+
+/*.list_show_active ~ .footer .filter__active {*/
+    /*background: lightblue;*/
+/*}*/
+
+/*.list_show_completed ~ .footer .filter__completed {*/
+    /*background: lightblue;*/
+/*}*/
+
+.filter__container {
+    margin-right: 5px;
+    margin-left: 5px;
+    width: 130px;
+    height: 30px;
+    padding-top: 10px;
+
+    text-align: center;
+    font: inherit;
+    font-size: 15px;
+    font-weight: bold;
+
+    color: darkgray;
+    border: lightblue solid 2px;
+    border-radius: 25px;
+    /*outline: none;*/
+
+    cursor: default;
+    display: inline-block;
+}
+
+
+
