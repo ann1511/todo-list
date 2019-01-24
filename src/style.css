@@ -39,6 +39,7 @@ body {
     color: darkgray;
     border: lightblue solid 2px;
     border-radius: 25px;
+    outline: none;
 }
 
 .todo-box__add-todo {
@@ -58,7 +59,7 @@ body {
 
 .todo-item {
     list-style-type: none; /* Убираем маркеры */
-    margin: 0px;
+    /*margin: 0px;*//* Не помню, зачем они нужны */
 }
 
 .todo-item__text {
@@ -101,24 +102,18 @@ body {
     padding-bottom: 20px;
 }
 
-.filter {
-    margin-right: 5px;
-    margin-left: 5px;
-    width: 130px;
-    height: 30px;
-
-    text-align: center;
-    font: inherit;
-    font-size: 15px;
-    font-weight: bold;
-
-    color: darkgray;
-    border: lightblue solid 2px;
-    border-radius: 25px;
-    /*outline: none;*/
-
-    cursor: default;
+.list_show_active ~ footer .filter__container[data-filter='active'] {
+    background: lightblue;
 }
+
+.list_show_all ~ footer .filter__container[data-filter='all'] {
+    background: lightblue;
+}
+
+.list_show_completed ~ footer .filter__container[data-filter='completed'] {
+    background: lightblue;
+}
+
 
 .list_show_active .todo-item_completed {
     display: none;
@@ -127,19 +122,6 @@ body {
 .list_show_completed .todo-item:not(.todo-item_completed) {
     display: none;
 }
-
-
-/*.todo-box__list:not(.list_show_active):not(.list_show_completed) ~ .footer .filter__all { !*блин, это же ратио, можно проще *!*/
-    /*background: lightblue;*/
-/*}*/
-
-/*.list_show_active ~ .footer .filter__active {*/
-    /*background: lightblue;*/
-/*}*/
-
-/*.list_show_completed ~ .footer .filter__completed {*/
-    /*background: lightblue;*/
-/*}*/
 
 .filter__container {
     margin-right: 5px;
@@ -156,11 +138,31 @@ body {
     color: darkgray;
     border: lightblue solid 2px;
     border-radius: 25px;
-    /*outline: none;*/
+    outline: none;
 
-    cursor: default;
+    /*cursor: default;*/ /*для div это и так мышь*/
     display: inline-block;
 }
+
+.filter__input {
+    display: none; /*Прячем галку поумолчанию*/
+}
+
+.filter__label {
+    position: relative;
+}
+
+.filter__label:before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    /*background: rgba(255, 0, 0, 0.06); !*кликабельная область уыеличивается неравномерно*!*/
+}
+
+
 
 
 
